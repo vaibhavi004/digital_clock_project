@@ -27,6 +27,7 @@ This project presents the design and implementation of a 6-digit digital clock t
 - Counter Logic: Increments seconds, minutes, hours  
 - Display Logic: Multiplexed digit control using enable signals  
 - Reset: Synchronously resets all digits to 00:00:00  
+![digital_clock results](https://github.com/user-attachments/assets/9ef83cca-d30c-487a-9381-63d7fbafb015)
 
 ## 💻 Technologies Used
 - Verilog HDL  
