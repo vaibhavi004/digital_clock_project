@@ -1,0 +1,15 @@
+NET "en[5]" LOC = P2;
+NET "en[4]" LOC = P3;
+NET "en[3]" LOC = P7;
+NET "en[2]" LOC = P9;
+NET "en[1]" LOC = P166;
+NET "en[0]" LOC = P167;
+NET "y[6]" LOC = P18;
+NET "y[5]" LOC = P16;
+NET "y[4]" LOC = P15;
+NET "y[3]" LOC = P13;
+NET "y[2]" LOC = P12;
+NET "y[1]" LOC = P11;
+NET "y[0]" LOC = P10;
+NET "c" LOC = P79;
+NET "reset" LOC = P21;

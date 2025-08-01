@@ -1,0 +1,97 @@
+module clock_final(y, en, c, reset);
+    input c, reset;
+    output [6:0] y;
+    output [5:0] en;
+    reg [6:0] y;
+    reg [5:0] en;
+    reg [3:0] s, s1, m, m1, h, h1;
+    wire c1, c2;
+    reg [2:0] digit_select; // Selects which digit to display
+    clk_divider g1(c1, c2, c);
+    initial begin
+        s = 0;
+        s1 = 0;
+        m = 0;
+        m1 = 0;
+        h = 0;
+        h1 = 0;
+        digit_select = 0;
+    end
+    always @(posedge c1 or posedge reset) begin
+        if (reset) begin
+            s = 0;
+            s1 = 0;
+            m = 0;
+            m1 = 0;
+            h = 0;
+            h1 = 0;
+        end else begin
+            s = s + 1;
+            if (s == 10) begin
+                s = 0;
+                s1 = s1 + 1;
+            end
+            if (s1 == 6) begin
+                s1 = 0;
+                m = m + 1;
+            end
+            if (m == 10) begin
+                m = 0;
+                m1 = m1 + 1;
+            end
+            if (m1 == 6) begin
+                m1 = 0;
+                h = h + 1;
+            end
+            if (h == 10 && h1 < 2 || h == 4 && h1 == 2) begin
+                h = 0;
+                h1 = h1 + 1;
+            end
+            if (h1 == 3 && h == 0) begin
+                h1 = 0;
+            end
+        end  
+    end
+    always @(posedge c2) begin
+        digit_select = digit_select + 1;
+        if (digit_select == 6)
+            digit_select = 0;
+        case (digit_select)
+            3'd0: begin en = 6'b000001; y = get_segment(s); end
+            3'd1: begin en = 6'b000010; y = get_segment(s1); end
+            3'd2: begin en = 6'b000100; y = get_segment(m); end
+            3'd3: begin en = 6'b001000; y = get_segment(m1); end
+            3'd4: begin en = 6'b010000; y = get_segment(h); end
+            3'd5: begin en = 6'b100000; y = get_segment(h1); end
+        endcase
+    end
+    function [6:0] get_segment;
+        input [3:0] value;
+        case (value)
+            4'd0: get_segment = 7'b0111111;
+            4'd1: get_segment = 7'b0000110;
+            4'd2: get_segment = 7'b1011011;
+            4'd3: get_segment = 7'b1001111;
+            4'd4: get_segment = 7'b1100110;
+            4'd5: get_segment = 7'b1101101;
+            4'd6: get_segment = 7'b1111101;
+            4'd7: get_segment = 7'b0000111;
+            4'd8: get_segment = 7'b1111111;
+            4'd9: get_segment = 7'b1101111;
+            default: get_segment = 7'b0000000;
+        endcase
+    endfunction 
+endmodule
+module clk_divider(clk1, clk2, clk);
+    input clk;
+    output clk1, clk2;
+    reg [25:0] temp; 
+    initial begin
+        temp = 26'd0;
+ end
+    always @(posedge clk) begin
+        temp = temp + 1'b1;
+    end
+    assign clk2 = temp[10];
+    assign clk1 = temp[22];  
+endmodule
